@@ -136,47 +136,38 @@ app.get('/api/traffic', async (req, res) => {
 
 // Novo endpoint para buscar o nome da interface
 app.get('/api/interface-name', async (req, res) => {
-    const IF_DESCR_OID = `1.3.6.1.2.1.2.2.1.2.${INTERFACE_INDEX}`;
-    try {
-        const session = snmp.createSession(MIKROTIK_IP, SNMP_COMMUNITY);
-        session.get([IF_DESCR_OID], (error, varbinds) => {
-            session.close();
-            if (error) {
-                res.json({ name: "Desconhecida" });
-            } else {
-                res.json({ name: varbinds[0].value.toString() });
-            }
-        });
-    } catch {
-        res.json({ name: "Desconhecida" });
-    }
+    const session = snmp.createSession(MIKROTIK_IP, SNMP_COMMUNITY);
+    const ifDescrOid = `1.3.6.1.2.1.2.2.1.2.${INTERFACE_INDEX}`;
+    session.get([ifDescrOid], (error, varbinds) => {
+        if (error) {
+            res.status(500).json({ error: 'Erro ao buscar nome da interface' });
+        } else {
+            res.json({ name: varbinds[0].value.toString() });
+        }
+        session.close();
+    });
 });
 
 // Novo endpoint para buscar o IP da interface
 app.get('/api/interface-ip', async (req, res) => {
-    // OID base para IP-MIB::ipAddrTable
-    const IP_ADDR_OID = '1.3.6.1.2.1.4.20.1.2';
-    try {
-        const session = snmp.createSession(MIKROTIK_IP, SNMP_COMMUNITY);
-        session.subtree(IP_ADDR_OID, (varbinds) => {
-            let foundIp = null;
-            for (const vb of varbinds) {
-                // vb.oid termina com o IP, vb.value é o índice da interface
-                if (vb.value == INTERFACE_INDEX) {
-                    foundIp = vb.oid.split('.').slice(-4).join('.');
-                    break;
-                }
-            }
+    const session = snmp.createSession(MIKROTIK_IP, SNMP_COMMUNITY);
+    // Busca o IP da interface pelo índice
+    const ipAddrTableOid = '1.3.6.1.2.1.4.20.1.2';
+    session.subtree(ipAddrTableOid, (varbind) => {
+        if (snmp.isVarbindError(varbind)) return;
+        if (varbind.value == INTERFACE_INDEX) {
+            // O OID termina com o IP, ex: ...1.3.6.1.2.1.4.20.1.2.192.168.56.3
+            const oidParts = varbind.oid.split('.');
+            const ip = oidParts.slice(-4).join('.');
+            res.json({ ip });
             session.close();
-            if (foundIp) {
-                res.json({ ip: foundIp });
-            } else {
-                res.json({ ip: null });
-            }
-        });
-    } catch (err) {
-        res.json({ ip: null, error: err.toString() });
-    }
+        }
+    }, (error) => {
+        if (error) {
+            res.status(500).json({ error: 'Erro ao buscar IP da interface' });
+            session.close();
+        }
+    });
 });
 
 // Rota raiz para verificar se o servidor está no ar
