@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitoramento de Tráfego SNMP</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background: #f7f7f7; }
+        #container { background: #fff; padding: 24px; border-radius: 8px; box-shadow: 0 2px 8px #0001; max-width: 750px; margin: auto; }
+        h1 { text-align: center; }
+        #status { margin-bottom: 16px; color: #555; text-align: center; }
+        canvas { background: #fff; }
+        #info { margin: 18px 0 10px 0; text-align: center; color: #333; }
+        #controls { text-align: center; margin-bottom: 18px; }
+        #controls button { margin: 0 8px; padding: 6px 18px; border-radius: 4px; border: 1px solid #888; background: #f0f0f0; cursor: pointer; }
+        #controls button:active { background: #e0e0e0; }
+        #legend { text-align: center; margin-top: 10px; }
+        #legend span { display: inline-block; margin: 0 12px; }
+        .in { color: #0074D9; font-weight: bold; }
+        .out { color: #FF4136; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <h1>Monitoramento de Tráfego SNMP</h1>
+        <div id="info">
+            <span>Interface monitorada: <b id="interfaceName">Desconhecida</b></span>
+        </div>
+        <div id="controls">
+            <button id="pauseBtn">Pausar</button>
+            <button id="resumeBtn" disabled>Retomar</button>
+            <button id="clearBtn">Limpar Gráfico</button>
+        </div>
+        <div id="status">Aguardando dados...</div>
+        <canvas id="trafficChart" width="650" height="320"></canvas>
+        <div id="legend">
+            <span class="in">&#9632; Entrada (bps)</span>
+            <span class="out">&#9632; Saída (bps)</span>
+        </div>
+    </div>
+    <script src="frontend.js"></script>
+</body>
+</html>
