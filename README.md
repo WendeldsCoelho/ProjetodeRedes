@@ -50,3 +50,8 @@ Este projeto realiza o monitoramento de tráfego de interfaces de roteadores Mik
 ## Licença
 
 Projeto acadêmico - uso livre para fins educacionais.
+
+## Autores
+
+- [Wendel D. S. Coelho](https://github.com/WendeldsCoelho)
+- [David Macedo](https

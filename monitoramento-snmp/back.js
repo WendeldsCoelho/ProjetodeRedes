@@ -12,9 +12,9 @@ console.log("Iniciando servidor...");
 
 
 // --- Configuração ---
-const MIKROTIK_IP = process.env.MIKROTIK_IP || '192.168.56.3'; // IP do Mikrotik na ether2 (Host-Only)
+const MIKROTIK_IP = process.env.MIKROTIK_IP || '192.168.90.2'; // IP do Mikrotik na ether2 (Host-Only)
 const SNMP_COMMUNITY = process.env.SNMP_COMMUNITY || 'public'; // Comunidade SNMP
-const INTERFACE_INDEX = process.env.INTERFACE_INDEX || '2'; 
+const INTERFACE_INDEX = process.env.INTERFACE_INDEX || '4'; 
 
 // --- OIDs para contadores de 64 bits (High Capacity) ---
 // Estes são preferíveis para interfaces rápidas para evitar "wrap-around" rápido do contador.
