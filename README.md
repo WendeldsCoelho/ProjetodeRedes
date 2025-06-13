@@ -54,4 +54,4 @@ Projeto acadêmico - uso livre para fins educacionais.
 ## Autores
 
 - [Wendel D. S. Coelho](https://github.com/WendeldsCoelho)
-- [David Macedo](https
+- [David Macedo](https://github.com/DavidMacedodev)
